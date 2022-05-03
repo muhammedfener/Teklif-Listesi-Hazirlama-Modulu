@@ -82,7 +82,7 @@ namespace Teklif_Listesi_Hazırlama_Modülü
             // 
             // dataselectbut
             // 
-            this.dataselectbut.Location = new System.Drawing.Point(761, 133);
+            this.dataselectbut.Location = new System.Drawing.Point(761, 178);
             this.dataselectbut.Name = "dataselectbut";
             this.dataselectbut.Size = new System.Drawing.Size(92, 23);
             this.dataselectbut.TabIndex = 4;
@@ -95,7 +95,7 @@ namespace Teklif_Listesi_Hazırlama_Modülü
             this.araboxresult.FormattingEnabled = true;
             this.araboxresult.Location = new System.Drawing.Point(597, 38);
             this.araboxresult.Name = "araboxresult";
-            this.araboxresult.Size = new System.Drawing.Size(256, 82);
+            this.araboxresult.Size = new System.Drawing.Size(256, 134);
             this.araboxresult.TabIndex = 5;
             // 
             // exportexcel

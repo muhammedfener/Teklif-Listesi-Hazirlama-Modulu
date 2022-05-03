@@ -284,21 +284,48 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
             var wb = new XLWorkbook();
             var ws = wb.Worksheets.Add("Page 1");
 
+            ws.PageSetup.PaperSize = XLPaperSize.A4Paper;
+            ws.PageSetup.Margins.Top = 0.751;
+            ws.PageSetup.Margins.Left = 0.70;
+            ws.PageSetup.Margins.Bottom = 0.751;
+            ws.PageSetup.Margins.Right = 0.70;
+            ws.PageSetup.Margins.Header = 0.3;
+            ws.PageSetup.Margins.Footer = 0.3;
+
             ws.Columns().Width = 8.43;
             ws.Rows().Height = 15;
             ws.Column(5).Width = 11.29;
+
             byte[] imageBytes = Convert.FromBase64String(logo);
             var logoimg = new MemoryStream(imageBytes, 0, imageBytes.Length);
             Bitmap logobmp = new Bitmap(logoimg);
 
+            /*var ilklogoarka = ws.Range(2, 1, 4, 3);
+            var ilkofficalarka = ws.Range(2, 4, 4, 9);
+
+            ws.AddPicture(logobmp, "logo-1.jpg").MoveTo(ws.Cell(2, 1), 4, 11, ws.Cell(5, 4), -4, -11);
+            ilklogoarka.Merge();
+
+            ilkofficalarka.Merge().Value = "OFFICAL PRICE OFFER";
+            ilkofficalarka.Style.Font.Bold = true;
+            ilkofficalarka.Style.Font.FontSize = 18;
+            ilkofficalarka.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+            ilkofficalarka.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);*/
+
+
+            int satir = 0;
             for (int i = 0; i < name.Count; i++)
             {
                 if(i%3 == 0)
                 {
-                    var logoarka = ws.Range(2, 1, 4, 3);
-                    var officalarka = ws.Range(2, 4, 4, 9);
+                    if (i > 2)
+                    {
+                        satir += 5;
+                    }
+                    var logoarka = ws.Range(2 + satir, 1, 4 + satir, 3);
+                    var officalarka = ws.Range(2 + satir, 4, 4 + satir, 9);
 
-                    ws.AddPicture(logobmp, "logo.jpg").MoveTo(ws.Cell(2,1),4,11,ws.Cell(5,4),-4,-11);
+                    ws.AddPicture(logobmp, "logo-"+(i+1)+".jpg").MoveTo(ws.Cell(2 + satir, 1),4,11,ws.Cell(5 + satir, 4),-4,-11);
                     logoarka.Merge();
 
                     officalarka.Merge().Value = "OFFICAL PRICE OFFER";
@@ -307,31 +334,31 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                     officalarka.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
                     officalarka.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
                 }
-                var urunbaslik = ws.Range(6,1,7,9);
-                var resimarka = ws.Range(8,1,19,4);
-                var enisoyazi = ws.Range(8,5,8,9);
-                var categoryicer = ws.Range(9,6,9,9);
-                var shoeuppericer = ws.Range(10,6,10,9);
-                var liningicer = ws.Range(11,6,11,9);
-                var innersolicer = ws.Range(12, 6, 12, 9);
-                var midsolicer = ws.Range(13, 6, 13, 9);
-                var outsolicer = ws.Range(14, 6, 14, 9);
-                var outsolefeaicer = ws.Range(15, 6, 15, 9);
-                var toeproticer = ws.Range(16, 6, 16, 9);
-                var sizerngicer = ws.Range(17, 6, 17, 9);
-                var priceicer = ws.Range(18,5,19,9);
+                var urunbaslik = ws.Range(6 + satir, 1,7 + satir, 9);
+                var resimarka = ws.Range(8 + satir, 1,19 + satir, 4);
+                var enisoyazi = ws.Range(8 + satir, 5,8 + satir, 9);
+                var categoryicer = ws.Range(9 + satir, 6,9 + satir, 9);
+                var shoeuppericer = ws.Range(10 + satir, 6,10 + satir, 9);
+                var liningicer = ws.Range(11 + satir, 6,11 + satir, 9);
+                var innersolicer = ws.Range(12 + satir, 6, 12 + satir, 9);
+                var midsolicer = ws.Range(13 + satir, 6, 13 + satir, 9);
+                var outsolicer = ws.Range(14 + satir, 6, 14 + satir, 9);
+                var outsolefeaicer = ws.Range(15 + satir, 6, 15 + satir, 9);
+                var toeproticer = ws.Range(16 + satir, 6, 16 + satir, 9);
+                var sizerngicer = ws.Range(17 + satir, 6, 17 + satir, 9);
+                var priceicer = ws.Range(18 + satir, 5,19 + satir, 9);
 
-                var categoryyazi = ws.Cell(9, 5);
-                var shoeupperyazi = ws.Cell(10, 5);
-                var liningyazi = ws.Cell(11, 5);
-                var innersoleyazi = ws.Cell(12, 5);
-                var midsoleyazi = ws.Cell(13, 5);
-                var outsoleyazi = ws.Cell(14, 5);
-                var outsolefeatyazi = ws.Cell(15, 5);
-                var toeprotectyazi = ws.Cell(16, 5);
-                var sizerangeyazi = ws.Cell(17, 5);
+                var categoryyazi = ws.Cell(9 + satir, 5);
+                var shoeupperyazi = ws.Cell(10 + satir, 5);
+                var liningyazi = ws.Cell(11 + satir, 5);
+                var innersoleyazi = ws.Cell(12 + satir, 5);
+                var midsoleyazi = ws.Cell(13 + satir, 5);
+                var outsoleyazi = ws.Cell(14 + satir, 5);
+                var outsolefeatyazi = ws.Cell(15 + satir, 5);
+                var toeprotectyazi = ws.Cell(16 + satir, 5);
+                var sizerangeyazi = ws.Cell(17 + satir, 5);
 
-                urunbaslik.Merge().Value = name[0];
+                urunbaslik.Merge().Value = name[i];
                 urunbaslik.Style.Font.Bold = true;
                 urunbaslik.Style.Font.FontSize = 16;
                 urunbaslik.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
@@ -345,7 +372,7 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
 
                 var ms = new MemoryStream(picture[i]);
                 Bitmap bitmap = new Bitmap(ms);
-                ws.AddPicture(bitmap, "Test").MoveTo(ws.Cell(8, 1), 10, 1, ws.Cell(20, 5), -10, -1);
+                ws.AddPicture(bitmap, i+".jpg").MoveTo(ws.Cell(8 + satir, 1), 10, 1, ws.Cell(20 + satir, 5), -10, -1);
 
                 enisoyazi.Merge().Value = "EN ISO 20345:2011";
                 enisoyazi.Style.Font.Bold = true;
@@ -469,16 +496,7 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                 priceicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                 priceicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
-                /*
-                range13.Merge().Value = "Price:" + Environment.NewLine + price[i];
-                range13.Style.Font.Bold = true;
-                range13.Style.Font.FontSize = 12;
-                range13.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
-                range13.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                range13.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                imagerange.Merge();
-                imagerange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;*/
+                satir += 15;
 
             }
             /*var ms = new MemoryStream(urunimg);
