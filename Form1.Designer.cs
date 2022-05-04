@@ -65,6 +65,7 @@ namespace Teklif_Listesi_Hazırlama_Modülü
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.urunsil = new System.Windows.Forms.Button();
             this.veritabaniformac = new System.Windows.Forms.Button();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -390,6 +391,12 @@ namespace Teklif_Listesi_Hazırlama_Modülü
             this.veritabaniformac.UseVisualStyleBackColor = true;
             this.veritabaniformac.Click += new System.EventHandler(this.veritabaniformac_Click);
             // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.DefaultExt = "pdf";
+            this.saveFileDialog1.Filter = "PDF|*.pdf";
+            this.saveFileDialog1.Title = "Dosya Oluştur";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -458,6 +465,7 @@ namespace Teklif_Listesi_Hazırlama_Modülü
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button urunsil;
         private System.Windows.Forms.Button veritabaniformac;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
