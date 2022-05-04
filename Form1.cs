@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -147,19 +148,6 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
         public string urunid;
         public byte[] urunimg;
 
-        /*public string name;
-        public string brad;
-        public string category;
-        public string shoeupper;
-        public string airlining;
-        public string innersole;
-        public string midsole;
-        public string outsole;
-        public string outsolefeatures;
-        public string toeprotect;
-        public string sizerange;
-        public string price;*/
-
 
         public float dolar;
         public float euro;
@@ -220,7 +208,7 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
         private void Form1_Load(object sender, EventArgs e)
         {
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            
+
             try
             {
                 string db = "server=" + dbip + "; uid=" + dbuser + "; pwd=" + dbpass + "; database=" + dbname + ";";
@@ -238,9 +226,9 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Veritabanına Bağlanırken Hata Oluştu!","Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Veritabanına Bağlanırken Hata Oluştu!", "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             try
@@ -267,242 +255,228 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                 MessageBox.Show("KUR BİLGİLERİ ALINAMIYOR!");
             }
         }
-        public static Bitmap resizeImage(Image imgToResize, Size size)
-        {
-            return (new Bitmap(imgToResize, size));
-        }
-
-
 
         private void exportexcel_Click(object sender, EventArgs e)
         {
-            /*if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string filename = saveFileDialog.FileName;
-            }*/
-
-            var wb = new XLWorkbook();
-            var ws = wb.Worksheets.Add("Page 1");
-
-            ws.PageSetup.PaperSize = XLPaperSize.A4Paper;
-            ws.PageSetup.Margins.Top = 0.751;
-            ws.PageSetup.Margins.Left = 0.70;
-            ws.PageSetup.Margins.Bottom = 0.751;
-            ws.PageSetup.Margins.Right = 0.70;
-            ws.PageSetup.Margins.Header = 0.3;
-            ws.PageSetup.Margins.Footer = 0.3;
-
-            ws.Columns().Width = 8.43;
-            ws.Rows().Height = 15;
-            ws.Column(5).Width = 11.29;
-
-            byte[] imageBytes = Convert.FromBase64String(logo);
-            var logoimg = new MemoryStream(imageBytes, 0, imageBytes.Length);
-            Bitmap logobmp = new Bitmap(logoimg);
-
-            /*var ilklogoarka = ws.Range(2, 1, 4, 3);
-            var ilkofficalarka = ws.Range(2, 4, 4, 9);
-
-            ws.AddPicture(logobmp, "logo-1.jpg").MoveTo(ws.Cell(2, 1), 4, 11, ws.Cell(5, 4), -4, -11);
-            ilklogoarka.Merge();
-
-            ilkofficalarka.Merge().Value = "OFFICAL PRICE OFFER";
-            ilkofficalarka.Style.Font.Bold = true;
-            ilkofficalarka.Style.Font.FontSize = 18;
-            ilkofficalarka.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            ilkofficalarka.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);*/
 
 
-            int satir = 0;
-            for (int i = 0; i < name.Count; i++)
-            {
-                if(i%3 == 0)
+                var wb = new XLWorkbook();
+                var ws = wb.Worksheets.Add("Page 1");
+
+                ws.PageSetup.PaperSize = XLPaperSize.A4Paper;
+                ws.PageSetup.Margins.Top = 0.751;
+                ws.PageSetup.Margins.Left = 0.70;
+                ws.PageSetup.Margins.Bottom = 0.751;
+                ws.PageSetup.Margins.Right = 0.70;
+                ws.PageSetup.Margins.Header = 0.3;
+                ws.PageSetup.Margins.Footer = 0.3;
+
+                ws.Columns().Width = 8.43;
+                ws.Rows().Height = 15;
+                ws.Column(5).Width = 11.29;
+
+                byte[] imageBytes = Convert.FromBase64String(logo);
+                var logoimg = new MemoryStream(imageBytes, 0, imageBytes.Length);
+                Bitmap logobmp = new Bitmap(logoimg);
+
+                int satir = 0;
+                for (int i = 0; i < name.Count; i++)
                 {
-                    if (i > 2)
+                    if (i % 3 == 0)
                     {
-                        satir += 5;
+                        if (i > 2)
+                        {
+                            satir += 5;
+                        }
+                        var logoarka = ws.Range(2 + satir, 1, 4 + satir, 3);
+                        var officalarka = ws.Range(2 + satir, 4, 4 + satir, 9);
+
+                        ws.AddPicture(logobmp, "logo-" + (i + 1) + ".jpg").MoveTo(ws.Cell(2 + satir, 1), 4, 11, ws.Cell(5 + satir, 4), -4, -11);
+                        logoarka.Merge();
+
+                        officalarka.Merge().Value = "OFFICAL PRICE OFFER";
+                        officalarka.Style.Font.Bold = true;
+                        officalarka.Style.Font.FontSize = 18;
+                        officalarka.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                        officalarka.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
                     }
-                    var logoarka = ws.Range(2 + satir, 1, 4 + satir, 3);
-                    var officalarka = ws.Range(2 + satir, 4, 4 + satir, 9);
+                    var urunbaslik = ws.Range(6 + satir, 1, 7 + satir, 9);
+                    var resimarka = ws.Range(8 + satir, 1, 19 + satir, 4);
+                    var enisoyazi = ws.Range(8 + satir, 5, 8 + satir, 9);
+                    var categoryicer = ws.Range(9 + satir, 6, 9 + satir, 9);
+                    var shoeuppericer = ws.Range(10 + satir, 6, 10 + satir, 9);
+                    var liningicer = ws.Range(11 + satir, 6, 11 + satir, 9);
+                    var innersolicer = ws.Range(12 + satir, 6, 12 + satir, 9);
+                    var midsolicer = ws.Range(13 + satir, 6, 13 + satir, 9);
+                    var outsolicer = ws.Range(14 + satir, 6, 14 + satir, 9);
+                    var outsolefeaicer = ws.Range(15 + satir, 6, 15 + satir, 9);
+                    var toeproticer = ws.Range(16 + satir, 6, 16 + satir, 9);
+                    var sizerngicer = ws.Range(17 + satir, 6, 17 + satir, 9);
+                    var priceicer = ws.Range(18 + satir, 5, 19 + satir, 9);
 
-                    ws.AddPicture(logobmp, "logo-"+(i+1)+".jpg").MoveTo(ws.Cell(2 + satir, 1),4,11,ws.Cell(5 + satir, 4),-4,-11);
-                    logoarka.Merge();
+                    var categoryyazi = ws.Cell(9 + satir, 5);
+                    var shoeupperyazi = ws.Cell(10 + satir, 5);
+                    var liningyazi = ws.Cell(11 + satir, 5);
+                    var innersoleyazi = ws.Cell(12 + satir, 5);
+                    var midsoleyazi = ws.Cell(13 + satir, 5);
+                    var outsoleyazi = ws.Cell(14 + satir, 5);
+                    var outsolefeatyazi = ws.Cell(15 + satir, 5);
+                    var toeprotectyazi = ws.Cell(16 + satir, 5);
+                    var sizerangeyazi = ws.Cell(17 + satir, 5);
 
-                    officalarka.Merge().Value = "OFFICAL PRICE OFFER";
-                    officalarka.Style.Font.Bold = true;
-                    officalarka.Style.Font.FontSize = 18;
-                    officalarka.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                    officalarka.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                    urunbaslik.Merge().Value = name[i];
+                    urunbaslik.Style.Font.Bold = true;
+                    urunbaslik.Style.Font.FontSize = 16;
+                    urunbaslik.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    urunbaslik.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    urunbaslik.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    resimarka.Merge();
+                    resimarka.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    resimarka.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    resimarka.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    var ms = new MemoryStream(picture[i]);
+                    Bitmap bitmap = new Bitmap(ms);
+                    ws.AddPicture(bitmap, i + ".jpg").MoveTo(ws.Cell(8 + satir, 1), 10, 1, ws.Cell(20 + satir, 5), -10, -1);
+
+                    enisoyazi.Merge().Value = "EN ISO 20345:2011";
+                    enisoyazi.Style.Font.Bold = true;
+                    enisoyazi.Style.Font.FontSize = 11;
+                    enisoyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    enisoyazi.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    enisoyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    categoryyazi.Value = "Category:";
+                    categoryyazi.Style.Font.Bold = true;
+                    categoryyazi.Style.Font.FontSize = 9;
+                    categoryyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    categoryyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    categoryicer.Merge().Value = category[i];
+                    categoryicer.Style.Font.FontSize = 9;
+                    categoryicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    categoryicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    categoryicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    shoeupperyazi.Value = "Shoe Upper:";
+                    shoeupperyazi.Style.Font.Bold = true;
+                    shoeupperyazi.Style.Font.FontSize = 9;
+                    shoeupperyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    shoeupperyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    shoeuppericer.Merge().Value = shoeupper[i];
+                    shoeuppericer.Style.Font.FontSize = 9;
+                    shoeuppericer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    shoeuppericer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    shoeuppericer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    liningyazi.Value = "Lining:";
+                    liningyazi.Style.Font.Bold = true;
+                    liningyazi.Style.Font.FontSize = 9;
+                    liningyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    liningyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    liningicer.Merge().Value = airlining[i];
+                    liningicer.Style.Font.FontSize = 9;
+                    liningicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    liningicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    liningicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    innersoleyazi.Value = "Inner Sole:";
+                    innersoleyazi.Style.Font.Bold = true;
+                    innersoleyazi.Style.Font.FontSize = 9;
+                    innersoleyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    innersoleyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    innersolicer.Merge().Value = innersole[i];
+                    innersolicer.Style.Font.FontSize = 9;
+                    innersolicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    innersolicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    innersolicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    midsoleyazi.Value = "Midsole:";
+                    midsoleyazi.Style.Font.Bold = true;
+                    midsoleyazi.Style.Font.FontSize = 9;
+                    midsoleyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    midsoleyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    midsolicer.Merge().Value = midsole[i];
+                    midsolicer.Style.Font.FontSize = 9;
+                    midsolicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    midsolicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    midsolicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    outsoleyazi.Value = "Outsole:";
+                    outsoleyazi.Style.Font.Bold = true;
+                    outsoleyazi.Style.Font.FontSize = 9;
+                    outsoleyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    outsoleyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    outsolicer.Merge().Value = outsole[i];
+                    outsolicer.Style.Font.FontSize = 9;
+                    outsolicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    outsolicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    outsolicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    outsolefeatyazi.Value = "Outsole Features:";
+                    outsolefeatyazi.Style.Font.Bold = true;
+                    outsolefeatyazi.Style.Font.FontSize = 9;
+                    outsolefeatyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    outsolefeatyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    outsolefeaicer.Merge().Value = outsolefea[i];
+                    outsolefeaicer.Style.Font.FontSize = 9;
+                    outsolefeaicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    outsolefeaicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    outsolefeaicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    toeprotectyazi.Value = "Toe Protection:";
+                    toeprotectyazi.Style.Font.Bold = true;
+                    toeprotectyazi.Style.Font.FontSize = 9;
+                    toeprotectyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    toeprotectyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    toeproticer.Merge().Value = toeprotect[i];
+                    toeproticer.Style.Font.FontSize = 9;
+                    toeproticer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    toeproticer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    toeproticer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    sizerangeyazi.Value = "Size Range:";
+                    sizerangeyazi.Style.Font.Bold = true;
+                    sizerangeyazi.Style.Font.FontSize = 9;
+                    sizerangeyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                    sizerangeyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    sizerngicer.Merge().Value = sizerange[i];
+                    sizerngicer.Style.Font.FontSize = 9;
+                    sizerngicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                    sizerngicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    sizerngicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    priceicer.Merge().Value = "PRICE" + Environment.NewLine + price[i];
+                    priceicer.Style.Font.Bold = true;
+                    priceicer.Style.Font.FontSize = 11;
+                    priceicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
+                    priceicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    priceicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                    satir += 15;
+
                 }
-                var urunbaslik = ws.Range(6 + satir, 1,7 + satir, 9);
-                var resimarka = ws.Range(8 + satir, 1,19 + satir, 4);
-                var enisoyazi = ws.Range(8 + satir, 5,8 + satir, 9);
-                var categoryicer = ws.Range(9 + satir, 6,9 + satir, 9);
-                var shoeuppericer = ws.Range(10 + satir, 6,10 + satir, 9);
-                var liningicer = ws.Range(11 + satir, 6,11 + satir, 9);
-                var innersolicer = ws.Range(12 + satir, 6, 12 + satir, 9);
-                var midsolicer = ws.Range(13 + satir, 6, 13 + satir, 9);
-                var outsolicer = ws.Range(14 + satir, 6, 14 + satir, 9);
-                var outsolefeaicer = ws.Range(15 + satir, 6, 15 + satir, 9);
-                var toeproticer = ws.Range(16 + satir, 6, 16 + satir, 9);
-                var sizerngicer = ws.Range(17 + satir, 6, 17 + satir, 9);
-                var priceicer = ws.Range(18 + satir, 5,19 + satir, 9);
-
-                var categoryyazi = ws.Cell(9 + satir, 5);
-                var shoeupperyazi = ws.Cell(10 + satir, 5);
-                var liningyazi = ws.Cell(11 + satir, 5);
-                var innersoleyazi = ws.Cell(12 + satir, 5);
-                var midsoleyazi = ws.Cell(13 + satir, 5);
-                var outsoleyazi = ws.Cell(14 + satir, 5);
-                var outsolefeatyazi = ws.Cell(15 + satir, 5);
-                var toeprotectyazi = ws.Cell(16 + satir, 5);
-                var sizerangeyazi = ws.Cell(17 + satir, 5);
-
-                urunbaslik.Merge().Value = name[i];
-                urunbaslik.Style.Font.Bold = true;
-                urunbaslik.Style.Font.FontSize = 16;
-                urunbaslik.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                urunbaslik.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                urunbaslik.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                resimarka.Merge();
-                resimarka.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                resimarka.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                resimarka.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                var ms = new MemoryStream(picture[i]);
-                Bitmap bitmap = new Bitmap(ms);
-                ws.AddPicture(bitmap, i+".jpg").MoveTo(ws.Cell(8 + satir, 1), 10, 1, ws.Cell(20 + satir, 5), -10, -1);
-
-                enisoyazi.Merge().Value = "EN ISO 20345:2011";
-                enisoyazi.Style.Font.Bold = true;
-                enisoyazi.Style.Font.FontSize = 11;
-                enisoyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                enisoyazi.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                enisoyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                categoryyazi.Value = "Category:";
-                categoryyazi.Style.Font.Bold = true;
-                categoryyazi.Style.Font.FontSize = 9;
-                categoryyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                categoryyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                categoryicer.Merge().Value = category[i];
-                categoryicer.Style.Font.FontSize = 9;
-                categoryicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                categoryicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                categoryicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                shoeupperyazi.Value = "Shoe Upper:";
-                shoeupperyazi.Style.Font.Bold = true;
-                shoeupperyazi.Style.Font.FontSize = 9;
-                shoeupperyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                shoeupperyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                shoeuppericer.Merge().Value = shoeupper[i];
-                shoeuppericer.Style.Font.FontSize = 9;
-                shoeuppericer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                shoeuppericer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                shoeuppericer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                liningyazi.Value = "Lining:";
-                liningyazi.Style.Font.Bold = true;
-                liningyazi.Style.Font.FontSize = 9;
-                liningyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                liningyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                liningicer.Merge().Value = airlining[i];
-                liningicer.Style.Font.FontSize = 9;
-                liningicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                liningicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                liningicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                innersoleyazi.Value = "Inner Sole:";
-                innersoleyazi.Style.Font.Bold = true;
-                innersoleyazi.Style.Font.FontSize = 9;
-                innersoleyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                innersoleyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                innersolicer.Merge().Value = innersole[i];
-                innersolicer.Style.Font.FontSize = 9;
-                innersolicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                innersolicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                innersolicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                midsoleyazi.Value = "Midsole:";
-                midsoleyazi.Style.Font.Bold = true;
-                midsoleyazi.Style.Font.FontSize = 9;
-                midsoleyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                midsoleyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                midsolicer.Merge().Value = midsole[i];
-                midsolicer.Style.Font.FontSize = 9;
-                midsolicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                midsolicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                midsolicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                outsoleyazi.Value = "Outsole:";
-                outsoleyazi.Style.Font.Bold = true;
-                outsoleyazi.Style.Font.FontSize = 9;
-                outsoleyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                outsoleyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                outsolicer.Merge().Value = outsole[i];
-                outsolicer.Style.Font.FontSize = 9;
-                outsolicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                outsolicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                outsolicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                outsolefeatyazi.Value = "Outsole Features:";
-                outsolefeatyazi.Style.Font.Bold = true;
-                outsolefeatyazi.Style.Font.FontSize = 9;
-                outsolefeatyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                outsolefeatyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                outsolefeaicer.Merge().Value = outsolefea[i];
-                outsolefeaicer.Style.Font.FontSize = 9;
-                outsolefeaicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                outsolefeaicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                outsolefeaicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                toeprotectyazi.Value = "Toe Protection:";
-                toeprotectyazi.Style.Font.Bold = true;
-                toeprotectyazi.Style.Font.FontSize = 9;
-                toeprotectyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                toeprotectyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                toeproticer.Merge().Value = toeprotect[i];
-                toeproticer.Style.Font.FontSize = 9;
-                toeproticer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                toeproticer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                toeproticer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                sizerangeyazi.Value = "Size Range:";
-                sizerangeyazi.Style.Font.Bold = true;
-                sizerangeyazi.Style.Font.FontSize = 9;
-                sizerangeyazi.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-                sizerangeyazi.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                sizerngicer.Merge().Value = sizerange[i];
-                sizerngicer.Style.Font.FontSize = 9;
-                sizerngicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                sizerngicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                sizerngicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                priceicer.Merge().Value = "PRICE" + Environment.NewLine + price[i];
-                priceicer.Style.Font.Bold = true;
-                priceicer.Style.Font.FontSize = 11;
-                priceicer.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
-                priceicer.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                priceicer.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                satir += 15;
-
+                try
+                {
+                    wb.SaveAs(filename);
+                }
+                catch(Exception) {
+                    MessageBox.Show("Dosya Oluşturulamadı!", "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                MessageBox.Show("Dosya Kaydedildi!", "İşlem Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            /*var ms = new MemoryStream(urunimg);
-            Bitmap bitmap = new Bitmap(ms);
-            ws.AddPicture(bitmap, "Test").MoveTo(ws.Cell("B5")).WithSize(275,275);*/
-            wb.SaveAs("file.xlsx");
 
         }
 
@@ -544,8 +518,8 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
             try
             {
                 float tlfiyat = float.Parse(priceboxtl.Text, CultureInfo.InvariantCulture.NumberFormat);
-                priceboxeuro.Text = Convert.ToString(tlfiyat / euro);
-                priceboxdolar.Text = Convert.ToString(tlfiyat / dolar);
+                priceboxeuro.Text = Convert.ToString(Math.Round(tlfiyat / euro, 2));
+                priceboxdolar.Text = Convert.ToString(Math.Round(tlfiyat / dolar, 2));
             }
             catch (Exception)
             {
@@ -555,6 +529,47 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
 
         private void exportpdf_Click(object sender, EventArgs e)
         {
+            var CurrentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            Microsoft.Office.Interop.Excel.Application excelApplication;
+            Microsoft.Office.Interop.Excel.Workbook excelWorkbook;
+
+            excelApplication = new Microsoft.Office.Interop.Excel.Application();
+            excelApplication.ScreenUpdating = false;
+            excelApplication.DisplayAlerts = false;
+            excelWorkbook = excelApplication.Workbooks.Open(CurrentDirectory + "/file.xlsx");
+            if (excelWorkbook == null)
+            {
+                excelApplication.Quit();
+
+                excelApplication = null;
+                excelWorkbook = null;
+
+                MessageBox.Show("PDF Oluşturulamadı!" + Environment.NewLine + "Tekrar Deneyin!","HATA!",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+            try
+            {
+                excelWorkbook.ExportAsFixedFormat(Microsoft.Office.Interop.Excel.XlFixedFormatType.xlTypePDF, CurrentDirectory + "/test.pdf");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("PDF Oluşturulamadı!" + Environment.NewLine + "Tekrar Deneyin!", "HATA!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                excelWorkbook.Close();
+                excelApplication.Quit();
+
+                excelApplication = null;
+                excelWorkbook = null;
+            }
+
+            // You can use the following method to automatically open the PDF after export if you wish
+            // Make sure that the file actually exists first...
+            if (System.IO.File.Exists("test.pdf"))
+            {
+                System.Diagnostics.Process.Start("test.pdf");
+            }
+
 
         }
 

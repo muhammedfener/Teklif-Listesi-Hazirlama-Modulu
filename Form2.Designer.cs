@@ -29,6 +29,7 @@ namespace Teklif_Listesi_Hazırlama_Modülü
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.dbip = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dbname = new System.Windows.Forms.TextBox();
@@ -140,6 +141,7 @@ namespace Teklif_Listesi_Hazırlama_Modülü
             this.Controls.Add(this.dbuser);
             this.Controls.Add(this.dbname);
             this.Controls.Add(this.dbip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
             this.Text = "Veritabanı Bilgileri";
             this.Load += new System.EventHandler(this.Form2_Load);
