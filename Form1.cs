@@ -484,11 +484,11 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
         {
             if (euroradio.Checked == true)
             {
-                price.Add(priceboxeuro.Text);
+                price.Add(priceboxeuro.Text + " EUR");
             }
             else if (dolarradio.Checked == true)
             {
-                price.Add(priceboxdolar.Text);
+                price.Add(priceboxdolar.Text + " USD");
             }
             else
             {
@@ -775,9 +775,8 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                     excelWorkbook = null;
                 }
                 File.Delete("temp.xlsx");
-                // You can use the following method to automatically open the PDF after export if you wish
-                // Make sure that the file actually exists first...
-                if (System.IO.File.Exists(filename))
+
+                if (File.Exists(filename))
                 {
                     System.Diagnostics.Process.Start(filename);
                 }
