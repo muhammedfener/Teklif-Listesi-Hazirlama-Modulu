@@ -203,10 +203,15 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
             {
                 MessageBox.Show(hata.ToString(), "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            Console.WriteLine("test");
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+
+
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             try
@@ -472,7 +477,8 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                 {
                     wb.SaveAs(filename);
                 }
-                catch(Exception) {
+                catch (Exception)
+                {
                     MessageBox.Show("Dosya Oluşturulamadı!", "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 MessageBox.Show("Dosya Kaydedildi!", "İşlem Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -612,7 +618,7 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
 
                     var ms = new MemoryStream(picture[i]);
                     Bitmap bitmap = new Bitmap(ms);
-                    ws.AddPicture(bitmap, i + ".jpg").MoveTo(ws.Cell(8 + satir, 1), 10, 1, ws.Cell(20 + satir, 5), -10, -1);
+                    ws.AddPicture(bitmap, i + ".jpg").MoveTo(ws.Cell(8 + satir, 1), 10, 2, ws.Cell(20 + satir, 5), -10, -2);
 
                     enisoyazi.Merge().Value = "EN ISO 20345:2011";
                     enisoyazi.Style.Font.Bold = true;
@@ -782,30 +788,47 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                 }
             }
 
-            
+
 
 
         }
 
+        public List<string> deletelist = new List<string>();
         private void urunsil_Click(object sender, EventArgs e)
         {
-            string silinecekurunadi = ekliurunlistesi.SelectedItem.ToString();
-            int index = name.IndexOf(silinecekurunadi);
-            ekliurunlistesi.Items.Remove(silinecekurunadi);
-            productid.RemoveAt(index);
-            name.RemoveAt(index);
-            picture.RemoveAt(index);
-            brad.RemoveAt(index);
-            category.RemoveAt(index);
-            shoeupper.RemoveAt(index);
-            airlining.RemoveAt(index);
-            innersole.RemoveAt(index);
-            midsole.RemoveAt(index);
-            outsole.RemoveAt(index);
-            outsolefea.RemoveAt(index);
-            toeprotect.RemoveAt(index);
-            sizerange.RemoveAt(index);
-            price.RemoveAt(index);
+            try
+            {
+                foreach (var item in ekliurunlistesi.SelectedItems)
+                {
+                    deletelist.Add(item.ToString());
+                }
+                for (int a = 0; a<deletelist.Count;a++) { 
+                    string silinecekurunadi = deletelist[a].ToString();
+                    int index = name.IndexOf(silinecekurunadi);
+                    ekliurunlistesi.Items.Remove(silinecekurunadi);
+                    productid.RemoveAt(index);
+                    name.RemoveAt(index);
+                    picture.RemoveAt(index);
+                    brad.RemoveAt(index);
+                    category.RemoveAt(index);
+                    shoeupper.RemoveAt(index);
+                    airlining.RemoveAt(index);
+                    innersole.RemoveAt(index);
+                    midsole.RemoveAt(index);
+                    outsole.RemoveAt(index);
+                    outsolefea.RemoveAt(index);
+                    toeprotect.RemoveAt(index);
+                    sizerange.RemoveAt(index);
+                    price.RemoveAt(index);
+                    
+                }
+                deletelist.Clear();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ürün Listesinde Ürün Bulunmuyor veya Ürün Seçmediniz!", "HATA", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            
         }
 
         private void veritabaniformac_Click(object sender, EventArgs e)
@@ -813,6 +836,5 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
             Form2 form2 = new Form2();
             form2.Show();
         }
-
     }
 }
