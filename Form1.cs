@@ -18,7 +18,10 @@ namespace Teklif_Listesi_Hazırlama_Modülü
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Her ürün verilerine bölünüp gerekli listeye eklenir.
+        /// Ürünün sırası her listede aynıdır. İlk eklenen ürün tüm listelerde 0. elemandır.
+        /// </summary>
         public List<string> searchname = new List<string>();
         public List<string> productid = new List<string>();
         public List<string> name = new List<string>();
@@ -35,6 +38,10 @@ namespace Teklif_Listesi_Hazırlama_Modülü
         public List<string> sizerange = new List<string>();
         public List<string> price = new List<string>();
 
+        /// <summary>
+        /// Veritabanı bilgileri kullanıcı bilgileri kaydettikten sonra depolanır. 
+        /// Liste oluştururken kullanılan firma logosu base64 olarak logo değişkeninde tutulur.
+        /// </summary>
         public string dbip = Properties.Settings.Default.dbip;
         public string dbname = Properties.Settings.Default.dbname;
         public string dbuser = Properties.Settings.Default.dbuser;
@@ -122,6 +129,11 @@ C2qMkaKx1OVSVUAkLgKPoBwPSiigDoLFVHxe1hto3f2RbjOOf9Y9ZvxKgim1zwv5sSP+9ufvKD/y
 xaiigDY+GSqnw20IKoUfZ+gGO5rl/gwSH8VoOEXUztXsM5ziiigCpo8EK/GZ5xEgma/vlaQKNxAh
 iwM1Z+LUUcmraSXjViIJMbhn+OOiigD1Zfuj6UtFFADWVW4ZQQDnkdx0p1FFACGkoopMB1FFFMAo
 oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
+
+        /// <summary>
+        /// Arama kutusunun boş olup olmadığı kontrol edilir. Boş ise veritabanındaki tüm veriler listelenir.
+        /// Değilse girilen yazıyı içeren ürünler bulunur.
+        /// </summary>
         private void aratext_TextChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(arabox.Text) == false)
@@ -144,14 +156,20 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                 }
             }
         }
-
+        /// <summary>
+        /// Anlık ekrana basmak için ürün urunimg değişkeninde tutulur.
+        /// Dolar ve euro kurları program açılırken merkez bankasından alınıp değişkene atanır.
+        /// </summary>
         public string urunid;
         public byte[] urunimg;
-
 
         public float dolar;
         public float euro;
 
+        /// <summary>
+        /// Kayıt edilen veritabanı bilgileri ile seçilen ada sahip ürünün bilgileri çekilir.
+        /// Çekilen veriler textbox ve picturebox'a yazılır. Fiyat boş ise 0, değilse ürünün fiyatı yazdırılır.
+        /// </summary>
         private void dataselectbut_Click(object sender, EventArgs e)
         {
             try
@@ -204,14 +222,14 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                 MessageBox.Show(hata.ToString(), "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            Console.WriteLine("test");
         }
 
+        /// <summary>
+        /// Form yüklenirken boyut ayarları yapılır. Veritabanına bağlanarak tüm ürün adları arama listesine eklenir.
+        /// Dolar ve euro kuru program başlangıcında merkez bankasından alınarak gerekli değişkenlere atanır.
+        /// </summary>
         private void Form1_Load(object sender, EventArgs e)
         {
-
-
-
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             try
@@ -261,15 +279,22 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
             }
         }
 
+        /// <summary>
+        /// Excel oluşturulması için kullanılan buton.
+        /// </summary>
         private void exportexcel_Click(object sender, EventArgs e)
         {
+            // Butona basıldıktan sonra dosyayı kaydet seçeneği tıklanıp tıklanmadığı kontrol edilir.
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string filename = saveFileDialog.FileName;
 
+                //Page 1 adında bir çalışma sayfası oluşturulur.
 
                 var wb = new XLWorkbook();
                 var ws = wb.Worksheets.Add("Page 1");
+
+                //Sayfa boyutu ve boşlukları ayarlanır.
 
                 ws.PageSetup.PaperSize = XLPaperSize.A4Paper;
                 ws.PageSetup.Margins.Top = 0.751;
@@ -279,35 +304,46 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                 ws.PageSetup.Margins.Header = 0.3;
                 ws.PageSetup.Margins.Footer = 0.3;
 
+                //Sütun ve satır boyutları ayarlanır.
+
                 ws.Columns().Width = 8.43;
                 ws.Rows().Height = 15;
                 ws.Column(5).Width = 11.29;
 
+                //Logo base64'ten bitmap'e dönüştürülür.
                 byte[] imageBytes = Convert.FromBase64String(logo);
                 var logoimg = new MemoryStream(imageBytes, 0, imageBytes.Length);
                 Bitmap logobmp = new Bitmap(logoimg);
 
+                //Ürünler döngü ile excel'e aktarılır.
                 int satir = 0;
                 for (int i = 0; i < name.Count; i++)
                 {
+                    //Sayfada 3 ürün bulunduğundan sayfa başında olması için 3 üründe bir şirket logosu eklenir.
                     if (i % 3 == 0)
                     {
                         if (i > 2)
                         {
                             satir += 5;
                         }
+                        //Logo ve yazının arkasındaki hücreler seçilir.
                         var logoarka = ws.Range(2 + satir, 1, 4 + satir, 3);
                         var officalarka = ws.Range(2 + satir, 4, 4 + satir, 9);
 
+                        //Logo x=4, y=11 piksel soldan, x=-4, y=-11 piksel sağdan küçültülür. (Sağ taraf eksili olmalı)
                         ws.AddPicture(logobmp, "logo-" + (i + 1) + ".jpg").MoveTo(ws.Cell(2 + satir, 1), 4, 11, ws.Cell(5 + satir, 4), -4, -11);
                         logoarka.Merge();
 
+                        //Yazı arkaplanındaki hücreler birleştirilir. Yazı kalın ve 18 punto yapılır.
+                        //Dikey olarak ortalanır yatayda sağa yaslanır.
                         officalarka.Merge().Value = "OFFICAL PRICE OFFER";
                         officalarka.Style.Font.Bold = true;
                         officalarka.Style.Font.FontSize = 18;
                         officalarka.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
                         officalarka.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
                     }
+                    //Veri girilecek hücreler seçilerek değişkene atanır. Satır değişkeni her veri girildikten sonra
+                    //gerçekleşecek artışı ekler.
                     var urunbaslik = ws.Range(6 + satir, 1, 7 + satir, 9);
                     var resimarka = ws.Range(8 + satir, 1, 19 + satir, 4);
                     var enisoyazi = ws.Range(8 + satir, 5, 8 + satir, 9);
@@ -332,6 +368,8 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                     var toeprotectyazi = ws.Cell(16 + satir, 5);
                     var sizerangeyazi = ws.Cell(17 + satir, 5);
 
+                    //Ürün başlığı için seçilen hücreler birleştirilir ve listeden "i" sırasındaki eleman hücreye yazdırılır.
+                    //Kalın ve 16 punto yazıya çevrilir. Dikey ve yatay olarak ortalanıp ince çerçeve eklenir.
                     urunbaslik.Merge().Value = name[i];
                     urunbaslik.Style.Font.Bold = true;
                     urunbaslik.Style.Font.FontSize = 16;
@@ -344,6 +382,7 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                     resimarka.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                     resimarka.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
+                    //Ürün resmi listeden stream olarak alınır. Soldan x=10,y=1, sağdan x=-10,x=-1 olarak küçültülür.
                     var ms = new MemoryStream(picture[i]);
                     Bitmap bitmap = new Bitmap(ms);
                     ws.AddPicture(bitmap, i + ".jpg").MoveTo(ws.Cell(8 + satir, 1), 10, 1, ws.Cell(20 + satir, 5), -10, -1);
@@ -473,6 +512,8 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                     satir += 15;
 
                 }
+                //Çalışma kitabı dosyaya kayıt edilmeye çalışılır. Dosya bulunuyorsa veya yazma izni yoksa hata çıktılanır.
+                //Kayıt edilirse işlemin başarılı olduğuyla ilgili uyarı çıktılanır.
                 try
                 {
                     wb.SaveAs(filename);
@@ -486,6 +527,12 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
 
         }
 
+        /// <summary>
+        /// Ürün ekle butonuna basıldıktan sonra dolar veya euro kurlarından birinin seçilip seçilmediği kontrol edilir.
+        /// Eğer ikiside seçilmediyse hata mesajı çıktılanır.
+        /// Tüm veriler düzenlendikten sonra textbox'lar ve picturebox'taki bilgiler gerekli listelere eklenir.
+        /// Ekli ürün listesi güncellenir.
+        /// </summary>
         private void uruneklebutton_Click(object sender, EventArgs e)
         {
             if (euroradio.Checked == true)
@@ -518,7 +565,10 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
 
             ekliurunlistesi.Items.Add(namebox.Text);
         }
-
+        /// <summary>
+        /// Alınan kur bilgilerine göre girilen TL fiyatı üzerinden hesap yapılır.
+        /// Virgülden sonra 2. basamağa kadar yuvarlanır. TL değeri yoksa hata çıktılanır.
+        /// </summary>
         private void kurbuton_Click(object sender, EventArgs e)
         {
             try
@@ -532,7 +582,12 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                 MessageBox.Show("TL Değeri Girin!", "Hata");
             }
         }
-
+        /// <summary>
+        /// PDF oluşturulması için kullanılan buton. Excel için kullanılan butondaki işlemlerin aynısı yapar.
+        /// Ayarları birbirinden bağımsızdır. Birisinde değiştirilen ayar diğerinde yapılması isteniyorsa orada da değiştirilmelidir.
+        /// Fonksiyon geçici bir excel oluşturup excel'den yararlanarak PDF dönüşümü sağlar. 
+        /// Bilgisayarda yüklü bir 2007 ve sonrası excel sürümü gerektirir.
+        /// </summary>
         private void exportpdf_Click(object sender, EventArgs e)
         {
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
@@ -780,8 +835,10 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
                     excelApplication = null;
                     excelWorkbook = null;
                 }
+                //Geçici olarak oluşturulan excel dosyası silinir.
                 File.Delete("temp.xlsx");
 
+                //Dosya oluşturuldu ve ulaşılabilir ise dosyayı açar.
                 if (File.Exists(filename))
                 {
                     System.Diagnostics.Process.Start(filename);
@@ -792,8 +849,13 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
 
 
         }
-
+        //Silinecek ürünler deletelist listesine eklenir.
         public List<string> deletelist = new List<string>();
+        /// <summary>
+        /// Sil butonuna basıldığında seçili olan ürünler listeye eklenir.
+        /// Referans olması için "name" listesindeki index'i bulunur. 
+        /// Ardından bu indexe sahip ürün tüm listelerden silinir.
+        /// </summary>
         private void urunsil_Click(object sender, EventArgs e)
         {
             try
@@ -830,7 +892,7 @@ oooAKTvRRQAn8X4Udx9KKKAF7UUUUAFIaKKAFHSloooAKKKKAP/Z";
             }
             
         }
-
+        //Veritabanı bilgileri girilmesi için gereken formu açar.
         private void veritabaniformac_Click(object sender, EventArgs e)
         {
             Form2 form2 = new Form2();
